@@ -1,8 +1,0 @@
-docker run -it --rm \
-  --network=shared \
-  --ip=$IP \
-  --name $NAME \
-  -e PATRONI_NAME=$NAME \
-  -e ADVERTISE_ADDRESS=$IP \
-  -v $NAME:/var/lib/postgresql/data \
-  ${IMAGE:-b}
