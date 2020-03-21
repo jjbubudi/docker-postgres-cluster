@@ -1,0 +1,41 @@
+scope: postgres
+name: postgres
+
+restapi:
+  listen: 0.0.0.0:8008
+  connect_address: ${ADVERTISE_ADDRESS}:8008
+
+bootstrap:
+  dcs:
+    postgresql:
+      use_pg_rewind: true
+
+  initdb:
+  - encoding: UTF8
+  - data-checksums
+
+  pg_hba:
+  - host replication replicator 0.0.0.0/0 md5
+  - host all all 0.0.0.0/0 md5
+
+postgresql:
+  listen: 0.0.0.0:5432
+  connect_address: ${ADVERTISE_ADDRESS}:5432
+  data_dir: /var/lib/postgresql/data/main
+  pgpass: /tmp/pgpass
+  authentication:
+    replication:
+      username: replicator
+      password: ${REPLICATION_PASSWORD}
+    superuser:
+      username: postgres
+      password: ${POSTGRES_PASSWORD}
+    rewind:
+      username: rewind
+      password: ${REWIND_PASSWORD}
+
+tags:
+    nofailover: false
+    noloadbalance: false
+    clonefrom: false
+    nosync: false
